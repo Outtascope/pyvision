@@ -21,11 +21,11 @@ class ImageTest(unittest.TestCase):
     def testDisplay(self):
         im = pv.Image(pv.LENA)
         key = im.show(delay=5000)
-        print 'Pressed Key:',key
+        print(f'Pressed Key: {key}')
 
         im = pv.Image(pv.BABOON)
         key = im.show(delay=5000)
-        print 'Pressed Key:',key
+        print(f'Pressed Key: {key}')
         
 
     def dtestMemory(self):
@@ -45,7 +45,7 @@ class ImageTest(unittest.TestCase):
             key = lena.show(delay=1)
             key = bab.show(delay=1)
         finish = time.time()
-        print "FPS:",40.0/(finish-start)
+        print(f"FPS:{40.0/(finish-start)}")
 
 
 class VideoTest(unittest.TestCase):

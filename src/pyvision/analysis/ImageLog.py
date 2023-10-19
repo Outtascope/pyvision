@@ -82,7 +82,7 @@ class ImageLog:
             ext = kwargs['format']
             del kwargs[format]
         if len(kwargs) > 0:
-            raise ValueError("Unsupported keyword arguments: %s"(list(kwargs.keys()),))
+            raise ValueError(f"Unsupported keyword arguments: {(list(kwargs.keys()),)}")
         image.asAnnotated().save(self.dir+'/%06d_%s.%s'%(self.count,label,ext),quality=95)
         self.count += 1
         #print message
@@ -96,7 +96,7 @@ class ImageLog:
             ext = kwargs['format']
             del kwargs[format]
         if len(kwargs) > 0:
-            raise ValueError("Unsupported keyword arguments: %s"(list(kwargs.keys()),))
+            raise ValueError("Unsupported keyword arguments: {(list(kwargs.keys()),)}")
         plot.asImage().asAnnotated().save(self.dir+'/%06d_%s.%s'%(self.count,label,ext),quality=95)
 
         if r_script:
