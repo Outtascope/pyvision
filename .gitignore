@@ -75,3 +75,5 @@ project.xcworkspace
 *.toc
 *.vrb
 *.xdy
+
+*.egg-info
