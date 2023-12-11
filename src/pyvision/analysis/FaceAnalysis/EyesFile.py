@@ -126,19 +126,41 @@ class EyesFile:
         Private: Do not call directly. Reads the eye file.  
         '''
         if self.filename[-4:] == '.csv':
-            f = open(self.filename,'r')
-            for line in f:
-                #print line
-                line = line.split(',')
-                if len(line) < 5:
-                    continue
-                for i in range(1,len(line),4):
+            with open(self.filename,'r') as f:
+                for line in f:
+                    #print line
+                    line = line.split(',')
+                    if len(line) < 5:
+                        continue
+                    for i in range(1,len(line),4):
+                        fname = self._parseName(line[0])
+                        if len(line) < i+4:
+                            print("Warning in %s image %s: Count of numbers is not a multiple of four."%(self.filename,fname))
+                            break
+                        eye1 = pv.Point(float(line[i+0]),float(line[i+1]))
+                        eye2 = pv.Point(float(line[i+2]),float(line[i+3]))
+                        
+                        truth_rect = pv.BoundingRect(eye1,eye2)
+                        truth_rect.w = 2.0 * truth_rect.w
+                        truth_rect.h = truth_rect.w
+                        truth_rect.x = truth_rect.x - 0.25*truth_rect.w
+                        truth_rect.y = truth_rect.y - 0.3*truth_rect.w
+            
+                        #print fname,eye1,eye2,truth_rect
+                        
+                        if fname not in self.images:
+                            self.images[fname] = []
+                            
+                        self.images[fname].append([fname,eye1,eye2,truth_rect])
+            
+        else:
+            with open(self.filename,'r') as f:
+                for line in f:
+                    #print line,
+                    line = line.split()
                     fname = self._parseName(line[0])
-                    if len(line) < i+4:
-                        print("Warning in %s image %s: Count of numbers is not a multiple of four."%(self.filename,fname))
-                        break
-                    eye1 = pv.Point(float(line[i+0]),float(line[i+1]))
-                    eye2 = pv.Point(float(line[i+2]),float(line[i+3]))
+                    eye1 = pv.Point(float(line[1]),float(line[2]))
+                    eye2 = pv.Point(float(line[3]),float(line[4]))
                     
                     truth_rect = pv.BoundingRect(eye1,eye2)
                     truth_rect.w = 2.0 * truth_rect.w
@@ -152,28 +174,6 @@ class EyesFile:
                         self.images[fname] = []
                         
                     self.images[fname].append([fname,eye1,eye2,truth_rect])
-            
-        else:
-            f = open(self.filename,'r')
-            for line in f:
-                #print line,
-                line = line.split()
-                fname = self._parseName(line[0])
-                eye1 = pv.Point(float(line[1]),float(line[2]))
-                eye2 = pv.Point(float(line[3]),float(line[4]))
-                
-                truth_rect = pv.BoundingRect(eye1,eye2)
-                truth_rect.w = 2.0 * truth_rect.w
-                truth_rect.h = truth_rect.w
-                truth_rect.x = truth_rect.x - 0.25*truth_rect.w
-                truth_rect.y = truth_rect.y - 0.3*truth_rect.w
-    
-                #print fname,eye1,eye2,truth_rect
-                
-                if fname not in self.images:
-                    self.images[fname] = []
-                    
-                self.images[fname].append([fname,eye1,eye2,truth_rect])
             
     def _parseName(self,fname):
         '''
